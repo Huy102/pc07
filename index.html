@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trái Tim & Pháo Hoa</title>
+    <style>
+        body {
+            background-color: black;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* Trái tim */
+        .heart {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            transform: rotate(-45deg);
+            box-shadow: -10px 10px 90px red;
+            animation: pulse 1s infinite;
+        }
+
+        .heart::before,
+        .heart::after {
+            content: "";
+            position: absolute;
+            width: 100px;
+            height: 100px;
+            background-color: red;
+            border-radius: 50%;
+        }
+
+        .heart::before {
+            top: -50px;
+            left: 0;
+        }
+
+        .heart::after {
+            left: 50px;
+            top: 0;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1) rotate(-45deg); }
+            50% { transform: scale(1.2) rotate(-45deg); }
+        }
+
+        /* Pháo hoa */
+        .firework {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: yellow;
+            border-radius: 50%;
+            box-shadow: 0 0 10px yellow;
+            animation: explode 0.6s ease-out forwards;
+        }
+
+        @keyframes explode {
+            0% { transform: scale(1); opacity: 1; }
+            100% { transform: scale(3); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Trái tim -->
+    <div class="heart"></div>
+
+    <script>
+        // Đặt trái tim vào giữa màn hình
+        document.querySelector(".heart").style.transform = "translate(-50%, -50%) rotate(-45deg)";
+
+        // Hàm tạo pháo hoa
+        function createFirework(x, y) {
+            for (let i = 0; i < 30; i++) {
+                let firework = document.createElement("div");
+                firework.classList.add("firework");
+                document.body.appendChild(firework);
+
+                let angle = Math.random() * 2 * Math.PI;
+                let distance = Math.random() * 100 + 50;
+                let xMove = Math.cos(angle) * distance;
+                let yMove = Math.sin(angle) * distance;
+
+                firework.style.left = `${x}px`;
+                firework.style.top = `${y}px`;
+
+                firework.animate([
+                    { transform: `translate(0, 0)`, opacity: 1 },
+                    { transform: `translate(${xMove}px, ${yMove}px)`, opacity: 0 }
+                ], {
+                    duration: 800,
+                    easing: "ease-out"
+                });
+
+                setTimeout(() => firework.remove(), 800);
+            }
+        }
+
+        // Sự kiện click để tạo pháo hoa
+        document.addEventListener("click", (e) => {
+            createFirework(e.clientX, e.clientY);
+        });
+    </script>
+
+</body>
+</html>
